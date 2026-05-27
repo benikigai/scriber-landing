@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Scriber — the standup runs itself</title>
+<meta name="description" content="A two-agent voice architecture for real-time standup facilitation. Scriber runs the meeting. Mnemo remembers everything. Linear updates live." />
+<meta property="og:title" content="Scriber — the standup runs itself" />
+<meta property="og:description" content="A two-agent voice architecture for real-time standup facilitation." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://usescriber.com" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b8cff'/%3E%3Ctext x='16' y='22' font-family='ui-monospace,monospace' font-size='18' font-weight='700' fill='%230a0a0c' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="brand">
+    <span class="brand-mark">S</span>
+    <span class="brand-word">scriber</span>
+  </a>
+  <div class="nav-right">
+    <span class="badge">OpenAI Voice Hack Night · May 27 2026</span>
+    <a class="nav-link" href="https://github.com/benikigai/scriber" target="_blank" rel="noopener">GitHub →</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1>The standup runs itself.</h1>
+    <p class="lede">
+      Scriber facilitates your standup by voice — prompting each person, capturing blockers,
+      updating Linear in real time. A second silent agent, <span class="mnemo">Mnemo</span>,
+      remembers every prior standup and whispers what you forgot.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#demo">Watch the demo</a>
+      <a class="btn btn-ghost" href="https://github.com/benikigai/scriber" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+    <p class="meta">Built in one night for OpenAI Voice Hack Night, Cerebral Valley.</p>
+  </section>
+
+  <section class="thesis">
+    <div class="kicker">Why this is different</div>
+    <h2>Every meeting AI is passive. Scriber acts.</h2>
+    <p>
+      Spinach, Otter, Fireflies, Fellow, MeetGeek — they listen, then post-meeting they act.
+      Scriber flips this. The agent acts <em>during</em> the conversation, with the Linear
+      board visibly mutating live. The visceral moment: someone describes a flow,
+      Scriber generates a diagram with <code>gpt-image-1</code>, and the image appears on
+      the ticket in the Linear UI before the speaker finishes their sentence.
+    </p>
+  </section>
+
+  <section class="agents">
+    <div class="agent agent-scriber">
+      <div class="agent-tag">Facilitator</div>
+      <h3>Scriber</h3>
+      <p>Joins your call. Prompts each teammate. Listens for blockers, commitments, status changes. Executes Linear actions as the conversation happens.</p>
+      <dl>
+        <div><dt>Voice</dt><dd>cedar</dd></div>
+        <div><dt>Model</dt><dd>gpt-realtime-2</dd></div>
+        <div><dt>Reasoning</dt><dd>medium · low latency</dd></div>
+      </dl>
+    </div>
+    <div class="agent agent-mnemo">
+      <div class="agent-tag">Supervisor</div>
+      <h3>Mnemo</h3>
+      <p>Never speaks into the call. Reads the live transcript. Holds context across every prior standup. Whispers tactical guidance to Scriber over a private side-channel.</p>
+      <dl>
+        <div><dt>Voice</dt><dd>silent · text only</dd></div>
+        <div><dt>Model</dt><dd>gpt-realtime-2</dd></div>
+        <div><dt>Reasoning</dt><dd>xhigh · deep thinking</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="howitworks">
+    <div class="kicker">How it works</div>
+    <h2>Two agents. One conversation. Real action.</h2>
+    <ol class="steps">
+      <li>
+        <span class="step-num">01</span>
+        <h4>Scriber joins your standup</h4>
+        <p>Voice in, voice out — over Google Meet or Zoom. Speaks like a colleague, not a bot.</p>
+      </li>
+      <li>
+        <span class="step-num">02</span>
+        <h4>It executes Linear actions live</h4>
+        <p>Creates tickets. Updates statuses. Adds comments. Generates diagrams via <code>gpt-image-1</code> and attaches them to tickets — all mid-sentence.</p>
+      </li>
+      <li>
+        <span class="step-num">03</span>
+        <h4>Mnemo whispers what Scriber would miss</h4>
+        <p><em>"Vishal mentioned this latency issue Tuesday — Ben committed to spiking it."</em> Scriber voices it naturally.</p>
+      </li>
+      <li>
+        <span class="step-num">04</span>
+        <h4>The standup wraps itself</h4>
+        <p>Verbal recap. Slack message. Linear board reflects everything that was said. Total human effort: just talking.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="demo" class="demo">
+    <div class="kicker">Demo</div>
+    <h2>Three minutes. One real standup.</h2>
+    <div class="video-frame">
+      <div class="video-placeholder">
+        <span class="rec">REC</span>
+        <p>Demo video drops at submission — refresh in a few hours.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="architecture">
+    <div class="kicker">Architecture</div>
+    <h2>Two Realtime sessions. One WebSocket. Browser-native.</h2>
+    <pre class="ascii"><code>                  ┌────────────────────────────┐
+                  │  Google Meet / Zoom call   │
+                  │  humans + Scriber          │
+                  └──────────┬─────────────────┘
+                             │  audio in/out (BlackHole 2ch)
+                  ┌──────────┴────────────────────┐
+                  │   Browser (Next.js page)       │
+                  │                                │
+                  │  ┌──────────────────────────┐  │
+                  │  │  Scriber                 │  │
+                  │  │  Realtime-2 · cedar      │  │
+                  │  │  Tools: linear.* ·       │  │
+                  │  │   diagram · slack        │  │
+                  │  └──────────────────────────┘  │
+                  │             │       ▲          │
+                  │   transcript│       │ whispers │
+                  │             ▼       │          │
+                  │  ┌──────────────────────────┐  │
+                  │  │  Wake-word state machine │  │
+                  │  │  ALWAYS_ON → LISTEN →    │  │
+                  │  │  ACTIVE → QUIET → prev   │  │
+                  │  └──────────────────────────┘  │
+                  └──────────┬─────────────────────┘
+                             │ WS
+                             ▼
+                  ┌────────────────────────────────┐
+                  │  Mnemo (Bun sidecar)           │
+                  │  Realtime-2 · text-only        │
+                  │  Tools: linear.read · rag ·    │
+                  │   whisper_to_scriber           │
+                  └────────────────────────────────┘</code></pre>
+    <p class="arch-note">
+      Tonight's build uses <strong>BlackHole 2ch</strong> for audio routing on macOS — Scriber
+      lives in a browser tab, audio bridged into Meet through a virtual cable.
+      Production swaps to <a href="https://recall.ai" target="_blank" rel="noopener">Recall.ai</a>
+      so Scriber appears as a real tile in the Meet grid.
+    </p>
+  </section>
+
+  <section class="stack">
+    <div class="kicker">Stack</div>
+    <h2>What's under the hood</h2>
+    <ul class="stack-grid">
+      <li><span>Realtime</span><code>gpt-realtime-2</code></li>
+      <li><span>Images</span><code>gpt-image-1</code></li>
+      <li><span>Tickets</span><code>Linear MCP + GraphQL</code></li>
+      <li><span>Recap</span><code>Slack incoming webhook</code></li>
+      <li><span>Audio</span><code>BlackHole 2ch → v1: Recall.ai</code></li>
+      <li><span>Memory</span><code>Mock JSON → v1: Mem0 / Qdrant</code></li>
+      <li><span>Runtime</span><code>Bun · Next.js 15</code></li>
+      <li><span>Hosting</span><code>Cloudflare Pages</code></li>
+    </ul>
+  </section>
+
+  <section class="cta-final">
+    <h2>Want this for your team?</h2>
+    <p>Drop a note — I'll wire you up when the hosted version ships.</p>
+    <a class="btn btn-primary" href="mailto:benjamin.shyong@gmail.com?subject=Scriber%20waitlist&body=Tell%20me%20when%20Scriber%20is%20ready.">Email the waitlist</a>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="brand-mark sm">S</span>
+      <span>scriber · usescriber.com</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/benikigai/scriber" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:benjamin.shyong@gmail.com">Contact</a>
+    </div>
+  </div>
+  <p class="colophon">Built in one night for OpenAI Voice Hack Night, Cerebral Valley · May 27 2026</p>
+</footer>
+</body>
+</html>
