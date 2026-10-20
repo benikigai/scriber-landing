@@ -1,25 +1,37 @@
 # scriber-landing
 
-Marketing landing page for [Scriber](https://github.com/benikigai/scriber) at **usescriber.com**.
+**Original static marketing page for [Scriber](https://github.com/benikigai/scriber), the voice agent that runs your standup.**
 
-Built as static HTML/CSS — single page, zero JS, zero build step. Deployed to Cloudflare Pages.
+> **Status:** Superseded. Built in May 2026 after OpenAI Voice Hack Night (2026-05-27). Since June 2026, `usescriber.com` is served by the landing route inside the main [scriber](https://github.com/benikigai/scriber) app, so this page is no longer what visitors see. Kept only for history.
 
-## Deploy
+## What it is
+
+A single page ("Scriber — the standup runs itself"): plain HTML and CSS, no JavaScript, no build step. Dark theme with electric blue and amber accents, a video placeholder for the demo, and links to the Scriber repo and the project page on [benjaminshyong.com](https://benjaminshyong.com/projects/scriber).
+
+| File | What |
+|---|---|
+| `index.html` | The page |
+| `styles.css` | All styles |
+| `_headers` | Cloudflare Pages security headers |
+
+## Run locally
 
 ```bash
-wrangler pages deploy . --project-name=scriber-landing --branch=main --commit-dirty=true
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Custom domain `usescriber.com` (apex + www) attached via the Cloudflare API.
+## Deploy (historical)
 
-## Files
+It was deployed to Cloudflare Pages:
 
-```
-index.html   ← the page
-styles.css   ← all styles, dark theme + electric blue / amber accents
-_headers     ← CF Pages security headers
+```bash
+wrangler pages deploy . --project-name=scriber-landing --branch=main
 ```
 
-## When the demo video lands
+## Related repos
 
-Replace the `<div class="video-placeholder">` block in `index.html` with a `<video>` tag or YouTube/Loom embed.
+- [benikigai/scriber](https://github.com/benikigai/scriber) — the product, including its current landing page.
+
+## Credits
+
+Built by [Ben Shyong](https://github.com/benikigai).
